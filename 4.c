@@ -26,7 +26,7 @@ char* pop(Node **head) {
     Node* prev = NULL;
     char* val;
     if (head == NULL) {
-        exit(-1);
+        perror("Head is null!");
     }
     prev = (*head);
     val = prev->value;
@@ -51,7 +51,7 @@ void print_list(Node *head) {
 }
 
 Node *read() {
-    Node *head = (Node *) NULL;
+    Node *head = NULL;
     char temp_str[200];
     int a = 1;
     while (a != 0) {
