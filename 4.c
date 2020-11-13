@@ -18,6 +18,7 @@ int push_Node(Node **head, char *value) {
     tmp->value = value;
     tmp->next = (*head);
     (*head) = tmp;
+
     return 0;
 }
 
@@ -58,6 +59,9 @@ Node *read() {
         char *prove = fgets(temp_str, 200, stdin);
 
         if (!prove) {
+            free(head);
+            free(temp_str);
+            free(prove);
             perror("Reading error!");
             return NULL;
         }
@@ -68,11 +72,21 @@ Node *read() {
         char *value = strdup(temp_str);
 
         if (!value) {
+            free(head);
+            free(temp_str);
+            free(prove);
+            free(value);
             perror("Memrore allocated");
             return NULL;
         }
 
-        if (push_Node(&head, value) == 1) return NULL;
+        if (push_Node(&head, value) == 1) {
+            free(head);
+            free(temp_str);
+            free(prove);
+            free(value);
+            return NULL;
+        }
     }
     return head;
 }
