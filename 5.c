@@ -8,7 +8,7 @@
 
 
 int read_from_file(int fd, void *buf, int n) {
-    int a = 1;
+    int result = 1;
     int ret;
     int bytes = 0;
     while (bytes != n) {
@@ -19,20 +19,20 @@ int read_from_file(int fd, void *buf, int n) {
                 continue;
             } else {
                 perror("Error while reading!");
-                a = -1;
-                return a;
+                result = -1;
+                return result;
             }
         }
         if (ret == 0) {
             perror("Error! End of file");
-            a = -2;
-            return a;
+            result = -2;
+            return result;
         }
         bytes += ret;
         buf += ret;
-        n = n - bytes;
+        n -= bytes;
     }
-    return a;
+    return result;
 }
 
 int main(int argc, char *argv[]) {
@@ -44,21 +44,19 @@ int main(int argc, char *argv[]) {
     int need_line = 1;
 
     if ((fd = open(argv[1], O_RDONLY)) == -1) {
-        if (errno == EINTR || errno == EAGAIN) {
 
-        } else {
-            perror("Error while reading!");
-        }
         perror("File is not opened\n");
-        return 1;
+        return -1;
     }
 
-    int file_size = lseek(fd, (size_t)0, SEEK_END);
-    lseek(fd, (size_t)0, SEEK_SET);
+    int file_size = lseek(fd, (size_t) 0, SEEK_END);
+    lseek(fd, (size_t) 0, SEEK_SET);
 
     char myfile[file_size];
 
-    read_from_file(fd, myfile, file_size);
+    if (read_from_file(fd, myfile, file_size) == -1 || read_from_file(fd, myfile, file_size) == -2) {
+        return -1;
+    }
     for (int i = 0; i < file_size; i++) {
 
         if (myfile[i] == '\n') {
