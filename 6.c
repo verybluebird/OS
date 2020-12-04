@@ -8,7 +8,6 @@
 
 
 int read_from_file(int fd, void *buf, int n) {
-    int result = 1;
     int ret;
     int bytes = 0;
     while (bytes != n) {
@@ -19,20 +18,18 @@ int read_from_file(int fd, void *buf, int n) {
                 continue;
             } else {
                 perror("Error while reading!");
-                result = -1;
-                return result;
+                return -1;
             }
         }
         if (ret == 0) {
             perror("Error! End of file");
-            result = -2;
-            return result;
+            return -2;
         }
         bytes += ret;
         buf += ret;
         n -= bytes;
     }
-    return result;
+    return 1;
 }
 
 int input_line(int line_number, int fd, int *offsets, char myfile[], int file_size, int *line_length) {
@@ -56,7 +53,7 @@ int input_line(int line_number, int fd, int *offsets, char myfile[], int file_si
 
 
         if (selectResult == -1) {
-            perror("select()");
+            perror("select() error");
             if (close(fd) == -1) perror("Error while closing");
             return -1;
         }
@@ -75,14 +72,14 @@ int input_line(int line_number, int fd, int *offsets, char myfile[], int file_si
                     perror("Error! No such line!");
                     if (close(fd) == -1)
                         perror("Error while closing.");
-                    return -1;
+                    return -2;
                 }
 
                 for (int i = offsets[need_line - 1]; i < offsets[need_line - 1] + line_length[need_line - 1]; i++)
                     printf("%c", myfile[i]);
             } else {
                 printf("Fd absents in fd_set.");
-                return -1;
+                return -3;
             }
 
         }
