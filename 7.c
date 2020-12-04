@@ -6,7 +6,7 @@
 #include <sys/mman.h>
 
 
-int input_line(int line_number, int fd, int *offsets, int file_size, int *line_length, char* buffer) {
+int input_line(int line_number, int fd, int *offsets, int file_size, int *line_length, char *buffer) {
     fd_set set;
     int max_fd = 0;
     struct timeval timeout;
@@ -40,7 +40,7 @@ int input_line(int line_number, int fd, int *offsets, int file_size, int *line_l
                 if (need_line == 0) {
                     if (close(fd) == -1)
                         perror("Error while closing.");
-                    if(munmap(buffer,file_size) == -1)
+                    if (munmap(buffer, file_size) == -1)
                         perror("Error while munmap");
                     return 0;
                 }
@@ -68,7 +68,7 @@ int input_line(int line_number, int fd, int *offsets, int file_size, int *line_l
                 printf("%c", buffer[i]);
             if (close(fd) == -1)
                 perror("Error while closing");
-            if(munmap(buffer,file_size) == -1)
+            if (munmap(buffer, file_size) == -1)
                 perror("Error while munmap");
             return 0;
         }
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     int offsets[100];
     int line_length[100];
     int fd;
-    char* buffer;
+    char *buffer;
     int line_number = 0;
 
     if ((fd = open(argv[1], O_RDONLY)) == -1) {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
               bytes.*/
     lseek(fd, (size_t) 0, SEEK_SET); /*The file offset is set to offset bytes.*/
 
-    buffer = mmap(0,file_size,PROT_READ,MAP_SHARED,fd,0);
+    buffer = mmap(0, file_size, PROT_READ, MAP_SHARED, fd, 0);
 
 
     for (int i = 0; i < file_size; i++) {
