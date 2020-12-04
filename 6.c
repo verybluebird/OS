@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
     int line_number = 0;
 
     if ((fd = open(argv[1], O_RDONLY)) == -1) {
-        perror("File is not opened\n");
+        perror("File is not opening.\n");
         return -1;
     }
 
@@ -114,14 +114,12 @@ int main(int argc, char *argv[]) {
     lseek(fd, (size_t) 0, SEEK_SET);
 
     char myfile[file_size];
-
-    if (read_from_file(fd, myfile, file_size) == -1 || read_from_file(fd, myfile, file_size) == -2) {
+    int res = read_from_file(fd, myfile, file_size);
+    if ( res == -1 || res == -2) {
         return -1;
     }
     for (int i = 0; i < file_size; i++) {
-
         if (myfile[i] == '\n') {
-
             if (line_number == 0) {
                 offsets[line_number] = 0;
                 line_length[line_number] = i + 1;
@@ -132,8 +130,5 @@ int main(int argc, char *argv[]) {
             line_number++;
         }
     }
-
-    printf("Count of lines : %d\n ", line_number);
-
     input_line(line_number, fd, offsets, myfile, file_size, line_length);
 }
